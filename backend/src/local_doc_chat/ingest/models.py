@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 Sha256 = Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
 
+
 class DocumentStatus(StrEnum):
     """Whether a document has text we can search."""
 
@@ -25,6 +26,30 @@ class Page(BaseModel):
     document_id: UUID
     page_number: int = Field(ge=1)
     text: str
+
+
+class Word(BaseModel):
+    """A word and its box in PDF points, measured from the top-left of the page."""
+
+    model_config = ConfigDict(frozen=True)
+
+    text: str
+    x0: float
+    top: float
+    x1: float
+    bottom: float
+
+
+class ExtractedPage(BaseModel):
+    """What the extractor reads from one page, before it is tied to a document."""
+
+    model_config = ConfigDict(frozen=True)
+
+    page_number: int = Field(ge=1)
+    width: float = Field(gt=0)
+    height: float = Field(gt=0)
+    text: str
+    words: tuple[Word, ...]
 
 
 class Document(BaseModel):

@@ -22,6 +22,36 @@ class FileTooLargeError(InvalidPdfError):
         self.max_bytes = max_bytes
 
 
+class CorruptPdfError(InvalidPdfError):
+    """The file has a PDF header but cannot be parsed."""
+
+    def __init__(self) -> None:
+        super().__init__("PDF is corrupt or unreadable")
+
+
+class EncryptedPdfError(InvalidPdfError):
+    """The PDF needs a password."""
+
+    def __init__(self) -> None:
+        super().__init__("PDF is password protected")
+
+
+class NoPagesError(InvalidPdfError):
+    """The PDF has zero pages."""
+
+    def __init__(self) -> None:
+        super().__init__("PDF has no pages")
+
+
+class TooManyPagesError(InvalidPdfError):
+    """The PDF has more pages than the configured limit."""
+
+    def __init__(self, page_count: int, max_pages: int) -> None:
+        super().__init__(f"PDF has {page_count} pages; the limit is {max_pages}")
+        self.page_count = page_count
+        self.max_pages = max_pages
+
+
 class NotAPdfError(InvalidPdfError):
     """The file does not start with the PDF header."""
 
