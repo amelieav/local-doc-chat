@@ -1,10 +1,10 @@
 # Local Doc Chat
 
-A desktop app to upload PDFs and ask questions. Answers come with citations;
-click one to open the PDF at that spot with the text highlighted. Everything
+A desktop app to upload PDFs and ask questions. Answers come with citations.
+Click one to open the PDF at that spot with the text highlighted. Everything
 runs locally.
 
-Work in progress. See the milestones in the project plan.
+Work in progress.
 
 ## Layout
 
