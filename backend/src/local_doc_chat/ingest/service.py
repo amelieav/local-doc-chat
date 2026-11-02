@@ -4,6 +4,7 @@ import hashlib
 
 from pydantic import BaseModel, ConfigDict
 
+from local_doc_chat.ingest.chunking import chunk_pages
 from local_doc_chat.ingest.extraction import PdfExtractor
 from local_doc_chat.ingest.models import Document, DocumentStatus, Page
 from local_doc_chat.ingest.validation import PdfLimits, validate_pdf_bytes
@@ -51,8 +52,9 @@ class IngestService:
         pages = [
             Page(document_id=document.id, page_number=p.page_number, text=p.text) for p in extracted
         ]
+        chunks = chunk_pages(document.id, extracted)
         try:
-            self._store.add(document, data, pages)
+            self._store.add(document, data, pages, chunks)
         except DuplicateDocumentError:
             # Another upload of the same file won the race after our check.
             winner = self._store.get_by_sha256(sha256)

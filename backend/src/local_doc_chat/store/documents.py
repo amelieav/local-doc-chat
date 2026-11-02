@@ -1,5 +1,6 @@
 """Document storage: PDFs on disk, metadata and page text in SQLite."""
 
+import json
 import sqlite3
 from collections.abc import Sequence
 from contextlib import closing
@@ -7,7 +8,7 @@ from pathlib import Path
 from typing import Protocol
 from uuid import UUID
 
-from local_doc_chat.ingest.models import Document, Page
+from local_doc_chat.ingest.models import Chunk, Document, Page
 
 
 class DuplicateDocumentError(Exception):
@@ -29,7 +30,9 @@ class DocumentNotFoundError(Exception):
 class DocumentStore(Protocol):
     """Where uploaded documents live. Swappable behind this interface."""
 
-    def add(self, document: Document, pdf: bytes, pages: Sequence[Page]) -> None: ...
+    def add(
+        self, document: Document, pdf: bytes, pages: Sequence[Page], chunks: Sequence[Chunk]
+    ) -> None: ...
 
     def get(self, document_id: UUID) -> Document | None: ...
 
@@ -38,6 +41,8 @@ class DocumentStore(Protocol):
     def list_documents(self) -> list[Document]: ...
 
     def get_pages(self, document_id: UUID) -> list[Page]: ...
+
+    def get_chunks(self, document_id: UUID) -> list[Chunk]: ...
 
     def read_pdf(self, document_id: UUID) -> bytes: ...
 
@@ -60,6 +65,15 @@ CREATE TABLE IF NOT EXISTS pages (
     text TEXT NOT NULL,
     PRIMARY KEY (document_id, page_number)
 );
+CREATE TABLE IF NOT EXISTS chunks (
+    id TEXT PRIMARY KEY,
+    document_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+    chunk_index INTEGER NOT NULL,
+    page_number INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    words TEXT NOT NULL,
+    UNIQUE (document_id, chunk_index)
+);
 """
 
 
@@ -74,7 +88,9 @@ class SqliteDocumentStore:
         with closing(self._connect()) as conn:
             conn.executescript(_SCHEMA)
 
-    def add(self, document: Document, pdf: bytes, pages: Sequence[Page]) -> None:
+    def add(
+        self, document: Document, pdf: bytes, pages: Sequence[Page], chunks: Sequence[Chunk]
+    ) -> None:
         # The insert runs first so a duplicate fails before the shared PDF file is touched.
         # A failed file write rolls the rows back.
         try:
@@ -94,6 +110,20 @@ class SqliteDocumentStore:
                 conn.executemany(
                     "INSERT INTO pages VALUES (?, ?, ?)",
                     [(str(p.document_id), p.page_number, p.text) for p in pages],
+                )
+                conn.executemany(
+                    "INSERT INTO chunks VALUES (?, ?, ?, ?, ?, ?)",
+                    [
+                        (
+                            str(c.id),
+                            str(c.document_id),
+                            c.chunk_index,
+                            c.page_number,
+                            c.text,
+                            json.dumps([w.model_dump() for w in c.words]),
+                        )
+                        for c in chunks
+                    ],
                 )
                 self._write_pdf(document.sha256, pdf)
         except sqlite3.IntegrityError as exc:
@@ -119,6 +149,16 @@ class SqliteDocumentStore:
                 (str(document_id),),
             ).fetchall()
         return [Page.model_validate(dict(row)) for row in rows]
+
+    def get_chunks(self, document_id: UUID) -> list[Chunk]:
+        with closing(self._connect()) as conn:
+            rows = conn.execute(
+                "SELECT * FROM chunks WHERE document_id = ? ORDER BY chunk_index",
+                (str(document_id),),
+            ).fetchall()
+        return [
+            Chunk.model_validate({**dict(row), "words": json.loads(row["words"])}) for row in rows
+        ]
 
     def read_pdf(self, document_id: UUID) -> bytes:
         document = self.get(document_id)

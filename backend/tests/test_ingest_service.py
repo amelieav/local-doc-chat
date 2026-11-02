@@ -64,6 +64,9 @@ def test_ingests_new_pdf(service: IngestService, store: SqliteDocumentStore) -> 
     assert store.get(document.id) == document
     assert store.read_pdf(document.id) == pdf
     assert [p.text for p in store.get_pages(document.id)] == ["Hello world", "Second page"]
+    chunks = store.get_chunks(document.id)
+    assert [(c.page_number, c.text) for c in chunks] == [(1, "Hello world"), (2, "Second page")]
+    assert [w.text for w in chunks[0].words] == ["Hello", "world"]
 
 
 def test_same_bytes_return_existing_without_reextracting(
