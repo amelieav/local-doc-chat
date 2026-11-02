@@ -52,6 +52,19 @@ class ExtractedPage(BaseModel):
     words: tuple[Word, ...]
 
 
+class Chunk(BaseModel):
+    """A passage from one page, with the boxes of its words for highlighting."""
+
+    model_config = ConfigDict(frozen=True)
+
+    id: UUID = Field(default_factory=uuid4)
+    document_id: UUID
+    chunk_index: int = Field(ge=0)
+    page_number: int = Field(ge=1)
+    text: str = Field(min_length=1)
+    words: tuple[Word, ...] = Field(min_length=1)
+
+
 class Document(BaseModel):
     """An uploaded PDF and its metadata."""
 
