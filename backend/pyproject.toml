@@ -41,5 +41,9 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "PT", "RUF", "S", "N", "AN
 strict = true
 files = ["src", "tests"]
 
+[[tool.mypy.overrides]]
+module = "sqlite_vec"
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
