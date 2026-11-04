@@ -44,6 +44,8 @@ class DocumentStore(Protocol):
 
     def get_chunks(self, document_id: UUID) -> list[Chunk]: ...
 
+    def get_chunks_by_ids(self, chunk_ids: Sequence[UUID]) -> list[Chunk]: ...
+
     def read_pdf(self, document_id: UUID) -> bytes: ...
 
     def delete(self, document_id: UUID) -> bool: ...
@@ -75,6 +77,10 @@ CREATE TABLE IF NOT EXISTS chunks (
     UNIQUE (document_id, chunk_index)
 );
 """
+
+
+def _chunk_from_row(row: sqlite3.Row) -> Chunk:
+    return Chunk.model_validate({**dict(row), "words": json.loads(row["words"])})
 
 
 class SqliteDocumentStore:
@@ -156,9 +162,16 @@ class SqliteDocumentStore:
                 "SELECT * FROM chunks WHERE document_id = ? ORDER BY chunk_index",
                 (str(document_id),),
             ).fetchall()
-        return [
-            Chunk.model_validate({**dict(row), "words": json.loads(row["words"])}) for row in rows
-        ]
+        return [_chunk_from_row(row) for row in rows]
+
+    def get_chunks_by_ids(self, chunk_ids: Sequence[UUID]) -> list[Chunk]:
+        """Return the chunks that exist, in the order asked. Unknown ids are skipped."""
+        with closing(self._connect()) as conn:
+            rows = [
+                conn.execute("SELECT * FROM chunks WHERE id = ?", (str(i),)).fetchone()
+                for i in chunk_ids
+            ]
+        return [_chunk_from_row(row) for row in rows if row is not None]
 
     def read_pdf(self, document_id: UUID) -> bytes:
         document = self.get(document_id)
