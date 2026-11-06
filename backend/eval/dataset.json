@@ -1,0 +1,52 @@
+{
+  "documents": [
+    {
+      "name": "solar-power.pdf",
+      "pages": [
+        "Photovoltaic cells are made from silicon wafers. When photons strike the wafer they knock electrons loose, creating a direct current. A typical residential panel holds sixty cells wired in series and converts roughly twenty percent of sunlight into electricity. Efficiency drops as cell temperature rises, so panels perform best on cool, clear days.",
+        "An inverter converts the direct current from panels into alternating current that matches the grid frequency. String inverters serve a whole row of panels, while microinverters sit behind each panel and keep the rest of the array running if one panel is shaded. Grid-tied systems must shut down automatically during an outage so that utility workers are not endangered by power flowing back into the lines.",
+        "Home batteries store surplus solar energy for the evening. Lithium iron phosphate cells are popular because they tolerate many charge cycles and are less prone to overheating. A typical household battery holds between ten and fifteen kilowatt hours, enough to cover an evening of cooking, lighting and television but not a full day of heating.",
+        "Solar arrays need little maintenance. Rain washes away most dust, though bird droppings and fallen leaves should be cleared by hand. Output declines by about half a percent each year as the silicon degrades, and most manufacturers guarantee eighty percent of original output after twenty five years. Inverters usually fail first and are replaced after ten to fifteen years."
+      ]
+    },
+    {
+      "name": "wind-power.pdf",
+      "pages": [
+        "Turbine blades work like aeroplane wings. Air flowing over the curved surface creates lift that turns the rotor. Pitch control twists each blade to catch more or less wind, and in storms the blades are feathered to stop the rotor. Most large turbines begin generating at about three metres per second and shut down above twenty five metres per second to avoid damage.",
+        "Offshore wind farms sit on monopile foundations driven into the seabed in shallow water, or on floating platforms anchored by cables in deep water. Wind at sea is stronger and steadier than on land, which raises output, but salt water corrosion and installation by specialised vessels make the turbines far more expensive to build and service.",
+        "Wind farms connect to the grid through transformers that step up the voltage for long distance transmission. When the grid cannot absorb all the power on a windy day, operators order curtailment, paying wind farms to switch off. Better transmission lines and storage reduce curtailment and make wind output easier to balance against demand.",
+        "Gearboxes are the most failure prone part of a wind turbine, followed by the generator bearings. Technicians climb the tower twice a year to inspect blades for cracks and lightning damage, and sensors in the nacelle monitor vibration to predict faults before they cause costly downtime. Direct drive generators remove the gearbox entirely but need expensive permanent magnets."
+      ]
+    },
+    {
+      "name": "home-heating.pdf",
+      "pages": [
+        "A heat pump moves heat rather than creating it. Refrigerant absorbs warmth from outside air or the ground, is compressed to raise its temperature, and releases that heat inside the house. For every unit of electricity used, a good heat pump delivers three to four units of heat, a ratio known as the coefficient of performance. Performance falls in very cold weather.",
+        "Insulation slows the escape of heat through the loft, walls and floor. Loft insulation is the cheapest upgrade and can cut heating bills by around fifteen percent. Cavity wall filling and double glazing follow, while draught proofing around doors and windows costs little. A well insulated home also lets a smaller, cheaper heating system do the job.",
+        "Condensing gas boilers capture heat from exhaust gases that older boilers wasted, reaching efficiencies above ninety percent. A combi boiler heats water on demand and removes the need for a storage tank, but its flow rate drops when two taps run at once. Boilers should be serviced annually, and carbon monoxide alarms must be fitted nearby.",
+        "Smart thermostats learn when the household is home and lower the temperature while everyone is out. Zoned radiator valves let each room be heated to its own schedule. Setting the thermostat one degree lower saves roughly ten percent on heating costs. Weather compensation adjusts boiler flow temperature automatically as the outside temperature changes."
+      ]
+    }
+  ],
+  "questions": [
+    { "question": "What fraction of sunlight does a typical home solar panel convert?", "document": "solar-power.pdf", "page": 1 },
+    { "question": "Why does a microinverter help when a panel is in shade?", "document": "solar-power.pdf", "page": 2 },
+    { "question": "Why must grid-connected solar switch off in a blackout?", "document": "solar-power.pdf", "page": 2 },
+    { "question": "Which battery chemistry is popular for home storage and why?", "document": "solar-power.pdf", "page": 3 },
+    { "question": "How fast do solar panels lose output each year?", "document": "solar-power.pdf", "page": 4 },
+    { "question": "Which solar component usually needs replacing first?", "document": "solar-power.pdf", "page": 4 },
+    { "question": "What wind speed makes a large turbine start producing power?", "document": "wind-power.pdf", "page": 1 },
+    { "question": "How does pitch control protect a turbine in a storm?", "document": "wind-power.pdf", "page": 1 },
+    { "question": "Why are offshore turbines costlier than onshore ones?", "document": "wind-power.pdf", "page": 2 },
+    { "question": "What are floating wind platforms used for?", "document": "wind-power.pdf", "page": 2 },
+    { "question": "What is curtailment of wind power?", "document": "wind-power.pdf", "page": 3 },
+    { "question": "Why do wind farms use transformers?", "document": "wind-power.pdf", "page": 3 },
+    { "question": "What is the weakest component in a wind turbine?", "document": "wind-power.pdf", "page": 4 },
+    { "question": "How often do technicians inspect wind turbine blades?", "document": "wind-power.pdf", "page": 4 },
+    { "question": "What is the drawback of direct drive generators?", "document": "wind-power.pdf", "page": 4 },
+    { "question": "How much heat does a heat pump deliver per unit of electricity?", "document": "home-heating.pdf", "page": 1 },
+    { "question": "What is the cheapest insulation upgrade?", "document": "home-heating.pdf", "page": 2 },
+    { "question": "Why can a combi boiler struggle when two taps are on?", "document": "home-heating.pdf", "page": 3 },
+    { "question": "How much does lowering the thermostat by a degree save?", "document": "home-heating.pdf", "page": 4 }
+  ]
+}
