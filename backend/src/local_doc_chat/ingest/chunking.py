@@ -10,8 +10,8 @@ def chunk_pages(
     document_id: UUID,
     pages: Sequence[ExtractedPage],
     *,
-    max_words: int = 200,
-    overlap: int = 40,
+    max_words: int = 100,
+    overlap: int = 20,
 ) -> list[Chunk]:
     """Chunks never cross a page, so every chunk cites one page.
 
