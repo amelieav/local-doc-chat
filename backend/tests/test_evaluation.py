@@ -1,11 +1,9 @@
-import hashlib
-import re
-from collections.abc import Sequence
 from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
+from fakes import HashingEmbedder
 from local_doc_chat.evaluation.pdfgen import make_pdf
 from local_doc_chat.evaluation.runner import (
     EvalDataset,
@@ -20,19 +18,6 @@ from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.validation import PdfLimits
 
 DATASET_PATH = Path(__file__).parents[1] / "eval" / "dataset.json"
-
-
-class HashingEmbedder:
-    """Bag-of-words vectors, so texts sharing words are close. Never returns a zero vector."""
-
-    def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
-        return [self.embed_query(t) for t in texts]
-
-    def embed_query(self, text: str) -> list[float]:
-        vector = [0.01] * 64
-        for word in re.findall(r"[a-z]+", text.lower()):
-            vector[int(hashlib.sha256(word.encode()).hexdigest(), 16) % 64] += 1
-        return vector
 
 
 def question(page: int = 1) -> EvalQuestion:
