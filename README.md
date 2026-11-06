@@ -18,7 +18,7 @@ Backend:
 
 ```bash
 cd backend
-python -m venv .venv
+python -m venv .venv     # Windows: py -3.12 -m venv .venv (MSYS2 Python has no sqlite-vec wheel)
 .venv/Scripts/activate   # Linux/macOS: source .venv/bin/activate
 pip install -e ".[dev]"
 ruff check . && ruff format --check . && mypy && pytest
@@ -32,7 +32,18 @@ npm install
 npm run lint && npm run typecheck && npm run format:check
 ```
 
-Copy `.env.example` to `.env` for local settings.
+Settings are read from environment variables; see `.env.example` for the names and defaults.
+
+Run the app (needs Ollama running with `nomic-embed-text` and a chat model pulled):
+
+```bash
+# terminal 1, from backend/
+.venv/Scripts/python -m uvicorn local_doc_chat.main:create_app --factory --port 8000
+# terminal 2, from frontend/
+npm run dev
+```
+
+Then open http://localhost:5173.
 
 ## License
 

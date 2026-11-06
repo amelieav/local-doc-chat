@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "C:\\Users\\ameli\\GitHub\\local-doc-chat\\backend\\.venv\\Scripts\\python.exe",
+      "runtimeArgs": ["-m", "uvicorn", "local_doc_chat.main:create_app", "--factory", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev", "--", "--port", "5173"],
+      "port": 5173
+    }
+  ]
+}
