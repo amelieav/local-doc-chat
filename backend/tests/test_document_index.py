@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 
+from local_doc_chat.evaluation.pdfgen import make_pdf
 from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.models import Document
 from local_doc_chat.ingest.service import IngestService
@@ -12,7 +13,6 @@ from local_doc_chat.store.documents import DocumentNotFoundError, SqliteDocument
 from local_doc_chat.store.embeddings import EmbeddingError
 from local_doc_chat.store.index import DocumentIndex
 from local_doc_chat.store.vectors import SqliteVecStore
-from pdf_fixtures import make_pdf
 
 VOCAB = ["cat", "dog", "fish", "bird"]
 

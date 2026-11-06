@@ -2,13 +2,14 @@ from pathlib import Path
 
 import pytest
 
+from local_doc_chat.evaluation.pdfgen import make_pdf
 from local_doc_chat.ingest.errors import EncryptedPdfError, NotAPdfError
 from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.models import Document, DocumentStatus, ExtractedPage
 from local_doc_chat.ingest.service import IngestService
 from local_doc_chat.ingest.validation import PdfLimits
 from local_doc_chat.store.documents import SqliteDocumentStore
-from pdf_fixtures import encrypt_pdf, make_pdf
+from pdf_fixtures import encrypt_pdf
 
 
 class CountingExtractor:

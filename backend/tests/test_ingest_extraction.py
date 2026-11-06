@@ -1,5 +1,6 @@
 import pytest
 
+from local_doc_chat.evaluation.pdfgen import make_pdf
 from local_doc_chat.ingest.errors import (
     CorruptPdfError,
     EncryptedPdfError,
@@ -7,7 +8,7 @@ from local_doc_chat.ingest.errors import (
 )
 from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.validation import PdfLimits
-from pdf_fixtures import encrypt_pdf, make_pdf
+from pdf_fixtures import encrypt_pdf
 
 LIMITS = PdfLimits()
 extractor = PdfplumberExtractor()
