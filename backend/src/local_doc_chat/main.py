@@ -18,7 +18,7 @@ from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.models import Document
 from local_doc_chat.ingest.service import IngestResult, IngestService
 from local_doc_chat.ingest.validation import PdfLimits
-from local_doc_chat.store.documents import SqliteDocumentStore
+from local_doc_chat.store.documents import DocumentNotFoundError, SqliteDocumentStore
 from local_doc_chat.store.embeddings import Embedder, EmbeddingError, OllamaEmbedder
 from local_doc_chat.store.index import DocumentIndex
 from local_doc_chat.store.vectors import SqliteVecStore
@@ -113,6 +113,14 @@ def create_app(
         if declared.isdigit() and int(declared) > settings.limits.max_bytes:
             raise FileTooLargeError(int(declared), settings.limits.max_bytes)
         return await run_in_threadpool(ingest_and_index, await request.body(), filename)
+
+    @app.get("/documents/{document_id}/pdf")
+    def get_pdf(document_id: UUID) -> Response:
+        try:
+            data = documents.read_pdf(document_id)
+        except DocumentNotFoundError:
+            raise HTTPException(404, "Document not found") from None
+        return Response(data, media_type="application/pdf")
 
     @app.delete("/documents/{document_id}", status_code=204)
     def delete_document(document_id: UUID) -> Response:

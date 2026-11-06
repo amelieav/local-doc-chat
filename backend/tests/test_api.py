@@ -55,6 +55,15 @@ def test_health(client: TestClient) -> None:
     assert client.get("/health").json() == {"status": "ok"}
 
 
+def test_get_pdf(client: TestClient) -> None:
+    document_id = upload(client).json()["document"]["id"]
+    response = client.get(f"/documents/{document_id}/pdf")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.content == PETS
+    assert client.get(f"/documents/{uuid4()}/pdf").status_code == 404
+
+
 def test_upload_list_ask_delete(client: TestClient) -> None:
     uploaded = upload(client)
     assert uploaded.status_code == 200
