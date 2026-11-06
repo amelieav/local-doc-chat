@@ -35,6 +35,9 @@ Passages:
 Question: {question}"""
 
 
+_CITE_REMINDER = "\n\nYour answer must cite the passages it uses like [1]. Answer again."
+
+
 class Citation(BaseModel):
     """A passage an answer relies on. `marker` is the [n] used in the answer text."""
 
@@ -73,7 +76,7 @@ class DocAgent:
     """Answers questions from indexed documents, citing file, page and passage."""
 
     def __init__(
-        self, index: DocumentIndex, model: ChatModel, *, k: int = 5, max_attempts: int = 3
+        self, index: DocumentIndex, model: ChatModel, *, k: int = 8, max_attempts: int = 3
     ) -> None:
         if k < 1 or max_attempts < 1:
             msg = "k and max_attempts must be at least 1"
@@ -147,9 +150,9 @@ class DocAgent:
             f"[{n}] ({r.document.filename}, page {r.chunk.page_number})\n{r.chunk.text}"
             for n, r in enumerate(passages, start=1)
         )
-        reply = self._model.complete(
-            _ANSWER_PROMPT.format(dont_know=DONT_KNOW, passages=listing, question=state["question"])
-        ).strip()
+        prompt = _ANSWER_PROMPT.format(
+            dont_know=DONT_KNOW, passages=listing, question=state["question"]
+        )
 
         # Only citations that point at a passage we showed the model count.
         cited: list[int] = []
@@ -162,7 +165,14 @@ class DocAgent:
                 cited.append(number)
             return match.group(0)
 
-        text = re.sub(r"\[(\d+)\]", keep_valid, reply).strip()
+        text = ""
+        # Broad questions often get an answer with no [n]; ask once more before giving up.
+        for suffix in ("", _CITE_REMINDER):
+            cited.clear()
+            reply = self._model.complete(prompt + suffix).strip()
+            text = re.sub(r"\[(\d+)\]", keep_valid, reply).strip()
+            if cited or text.lower().startswith(DONT_KNOW.lower()):
+                break
         if not cited or text.lower().startswith(DONT_KNOW.lower()):
             return {"answer": Answer(text=DONT_KNOW, citations=())}
         citations = tuple(

@@ -94,6 +94,20 @@ def test_answer_without_a_citation_is_rejected(index: DocumentIndex) -> None:
     assert not answer.found
 
 
+def test_uncited_answer_is_retried_once_with_a_reminder(index: DocumentIndex) -> None:
+    def reply(prompt: str) -> str:
+        if GRADE in prompt:
+            return dog_judge(prompt)
+        return "Dogs bark [1]." if "must cite" in prompt else "Dogs bark."
+
+    model = ScriptedModel(reply)
+
+    answer = DocAgent(index, model, k=2).ask("what do dogs do")
+
+    assert answer.text == "Dogs bark [1]."
+    assert model.count(ANSWER) == 2
+
+
 def test_citation_to_an_unseen_passage_is_dropped(index: DocumentIndex) -> None:
     model = ScriptedModel(
         lambda p: dog_judge(p) if GRADE in p else "Dogs bark [1] and cats purr [7]."
