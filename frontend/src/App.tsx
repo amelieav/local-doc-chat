@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 
 import { api } from "./api";
-import type { Answer, DocumentInfo, UploadResult } from "./types";
+import { PdfViewer } from "./PdfViewer";
+import type { Answer, Citation, DocumentInfo, UploadResult } from "./types";
 
 export function App() {
   const [documents, setDocuments] = useState<DocumentInfo[]>([]);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<Answer | null>(null);
+  const [viewing, setViewing] = useState<Citation | null>(null);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
@@ -59,6 +61,7 @@ export function App() {
     event.preventDefault();
     void run("Thinking (local model, can take a while)...", async () => {
       setAnswer(null);
+      setViewing(null);
       setAnswer(
         await api<Answer>("/ask", {
           method: "POST",
@@ -115,11 +118,37 @@ export function App() {
           <p>{answer.text}</p>
           {answer.citations.map((c) => (
             <blockquote key={c.marker}>
-              [{c.marker}] {c.filename}, page {c.page_number}
+              <button
+                onClick={() => {
+                  setViewing(c);
+                }}
+              >
+                [{c.marker}] {c.filename}, page {c.page_number}
+              </button>
               <br />
               <small>{c.passage}</small>
             </blockquote>
           ))}
+        </section>
+      )}
+
+      {viewing && (
+        <section>
+          <h2>
+            {viewing.filename}, page {viewing.page_number}{" "}
+            <button
+              onClick={() => {
+                setViewing(null);
+              }}
+            >
+              Close
+            </button>
+          </h2>
+          <PdfViewer
+            documentId={viewing.document_id}
+            pageNumber={viewing.page_number}
+            words={viewing.words}
+          />
         </section>
       )}
     </main>
