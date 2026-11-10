@@ -1,8 +1,8 @@
 # Local Doc Chat
+<img width="1545" height="706" alt="image" src="https://github.com/user-attachments/assets/cbc1b583-26b8-44b6-b8c4-9d8ffc269060" />
 
-A desktop app to upload PDFs and ask questions. Answers come with citations.
-Click one to open the PDF at that spot with the text highlighted. Everything
-runs locally.
+A locally hosted webapp to upload PDFs and ask questions. Answers come with citations.
+Click one to open the PDF at that spot with the text highlighted.
 
 Work in progress.
 
