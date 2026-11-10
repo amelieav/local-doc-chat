@@ -10,7 +10,7 @@ Work in progress.
 
 - `backend/` Python, FastAPI, LangGraph, Ollama, SQLite with sqlite-vec
 - `frontend/` React and TypeScript
-- `desktop/` Electron shell (later milestone)
+- `desktop/` Electron shell that runs the backend (no installer yet)
 
 ## Development
 
