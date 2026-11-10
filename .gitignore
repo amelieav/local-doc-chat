@@ -39,3 +39,7 @@ data/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local test PDFs (not committed)
+samples/*
+!samples/.gitkeep
