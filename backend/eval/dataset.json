@@ -57,6 +57,10 @@
         "Hydropower dams store water behind a wall and release it through turbines, so output can be raised within seconds. Pumped storage plants run the turbines backwards at night to lift water uphill, acting as a giant battery for the grid. Biomass plants burn wood pellets or crop waste to raise steam. The fuel is only low carbon if the trees are replanted, and transporting bulky pellets over long distances erodes the saving. Tidal barrages trap the incoming tide in a basin and release it through turbines as the sea falls. They produce power on a precise timetable set by the moon, but damage the mudflats where wading birds feed. Nuclear reactors split uranium atoms to boil water. Spent fuel stays radioactive for thousands of years and is stored in cooling ponds before burial in deep geological repositories.",
         "Geothermal wells reach hot rock a few kilometres down and bring up steam or hot water. Iceland uses the heat for district heating, and plants need no fuel, but drilling can trigger small earthquakes. Green hydrogen is made by splitting water with renewable electricity in an electrolyser. It can fuel steelworks and long distance ships, yet roughly a third of the energy is lost in conversion. Waste to energy plants incinerate household rubbish to make electricity and heat. Filters capture the toxic gases, and the leftover ash is tested before being used in road building. Wave energy devices bob on the surface and pump hydraulic fluid through generators. Storms can destroy them, which is why most prototypes remain small and none yet compete on cost."
       ]
+    },
+    {
+      "name": "GlobalEnergyReview2025.pdf",
+      "path": "pdfs/GlobalEnergyReview2025.pdf"
     }
   ],
   "questions": [
@@ -259,6 +263,166 @@
       "question": "Why have wave devices not become commercial?",
       "document": "energy-guide.pdf",
       "page": 2
+    },
+    {
+      "question": "What share of global coal use does China account for?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 6,
+      "expect": [
+        "58%"
+      ]
+    },
+    {
+      "question": "How did the rise in global electricity demand in 2024 compare with the past decade's annual average?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 6,
+      "expect": [
+        "twice"
+      ]
+    },
+    {
+      "question": "How much CO2 do solar, wind, nuclear, electric cars and heat pumps prevent each year?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 7,
+      "expect": [
+        "2.6 billion"
+      ]
+    },
+    {
+      "question": "By how much did emissions fall in advanced economies in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 7,
+      "expect": [
+        "1.1%"
+      ]
+    },
+    {
+      "question": "How fast did global oil demand grow in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 11,
+      "expect": [
+        "0.8%"
+      ]
+    },
+    {
+      "question": "Which country was the largest single source of oil demand growth in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 16,
+      "expect": [
+        "India"
+      ]
+    },
+    {
+      "question": "How much did gasoline use in India rise compared with 2019?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 16,
+      "expect": [
+        "41.7%"
+      ]
+    },
+    {
+      "question": "What share of the global electricity mix does coal have, the lowest since 1974?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 19,
+      "expect": [
+        "35%"
+      ]
+    },
+    {
+      "question": "What happened to coal consumption in the United States in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 20,
+      "expect": [
+        "4%"
+      ]
+    },
+    {
+      "question": "By how much did heat pump sales in the United States rise in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 25,
+      "expect": [
+        "15%"
+      ]
+    },
+    {
+      "question": "How did European heat pump sales change in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 25,
+      "expect": [
+        "21%"
+      ]
+    },
+    {
+      "question": "How much did global renewable capacity additions reach in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 28,
+      "expect": [
+        "700 GW"
+      ]
+    },
+    {
+      "question": "What share of United States electricity came from natural gas in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 28,
+      "expect": [
+        "40%"
+      ]
+    },
+    {
+      "question": "Who made up two-thirds of all renewable capacity in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 29,
+      "expect": [
+        "China"
+      ]
+    },
+    {
+      "question": "How much did China's solar PV additions reach in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 29,
+      "expect": [
+        "340 GW"
+      ]
+    },
+    {
+      "question": "How much nuclear capacity was brought online in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 30,
+      "expect": [
+        "7 GW"
+      ]
+    },
+    {
+      "question": "What is the total installed nuclear capacity?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 30,
+      "expect": [
+        "420 GW"
+      ]
+    },
+    {
+      "question": "How much new solar PV was added in the United States in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 30,
+      "expect": [
+        "50 GW"
+      ]
+    },
+    {
+      "question": "What was the atmospheric CO2 concentration in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 31,
+      "expect": [
+        "422.5"
+      ]
+    },
+    {
+      "question": "How high did energy-related CO2 emissions reach in 2024?",
+      "document": "GlobalEnergyReview2025.pdf",
+      "page": 31,
+      "expect": [
+        "37.8"
+      ]
     }
   ]
 }
