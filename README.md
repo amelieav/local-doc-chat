@@ -45,6 +45,20 @@ npm run dev
 
 Then open http://localhost:5173.
 
+## Retrieval eval
+
+`backend/eval/dataset.json` holds generated documents plus questions about a real report. Score
+retrieval (needs Ollama with the embedding model), or add `--answers` to also check the chat
+model's answers:
+
+```bash
+cd backend
+python -m local_doc_chat.evaluation [--answers]
+```
+
+`backend/eval/pdfs/GlobalEnergyReview2025.pdf` is the IEA's Global Energy Review 2025, used under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
 ## License
 
 MIT

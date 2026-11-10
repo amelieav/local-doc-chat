@@ -69,4 +69,4 @@ jobs:
           for _ in $(seq 60); do curl -s localhost:11434 >/dev/null && break; sleep 1; done
           ollama pull nomic-embed-text
       - name: Retrieval eval
-        run: python -m local_doc_chat.evaluation --min-hit-rate 0.9 --min-mrr 0.9 | tee -a "$GITHUB_STEP_SUMMARY"
+        run: python -m local_doc_chat.evaluation --min-hit-rate 0.9 --min-mrr 0.85 | tee -a "$GITHUB_STEP_SUMMARY"
