@@ -6,7 +6,7 @@ import type { Word } from "./types";
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
 
-const SCALE = 1.4;
+const MAX_SCALE = 1.5;
 
 interface Props {
   documentId: string;
@@ -17,11 +17,13 @@ interface Props {
 interface Size {
   width: number;
   height: number;
+  scale: number;
 }
 
 // shortcut: word boxes are drawn unrotated, so rotated pages highlight in the wrong place.
 export function PdfViewer({ documentId, pageNumber, words }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<Size | null>(null);
   const [error, setError] = useState("");
 
@@ -32,7 +34,10 @@ export function PdfViewer({ documentId, pageNumber, words }: Props) {
       try {
         const pdf = await loading.promise;
         const page = await pdf.getPage(pageNumber);
-        const viewport = page.getViewport({ scale: SCALE });
+        // shortcut: fits the width once per page; resizing the window needs a reselect.
+        const available = (scrollRef.current?.clientWidth ?? 800) - 64;
+        const scale = Math.min(MAX_SCALE, available / page.getViewport({ scale: 1 }).width);
+        const viewport = page.getViewport({ scale });
         const canvas = canvasRef.current;
         const context = canvas?.getContext("2d");
         if (state.cancelled || !canvas || !context) {
@@ -40,7 +45,7 @@ export function PdfViewer({ documentId, pageNumber, words }: Props) {
         }
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        setSize({ width: viewport.width, height: viewport.height });
+        setSize({ width: viewport.width, height: viewport.height, scale });
         setError("");
         await page.render({ canvasContext: context, viewport }).promise;
       } catch (e) {
@@ -55,23 +60,29 @@ export function PdfViewer({ documentId, pageNumber, words }: Props) {
     };
   }, [documentId, pageNumber]);
 
+  // Bring the highlighted passage into view, with some page above it for context.
+  useEffect(() => {
+    const first = words[0];
+    if (size && first) {
+      scrollRef.current?.scrollTo({ top: Math.max(0, first.top * size.scale - 120) });
+    }
+  }, [size, words]);
+
   return (
-    <div>
-      {error && <p style={{ color: "crimson" }}>{error}</p>}
-      <div style={{ position: "relative", width: size?.width, height: size?.height }}>
-        <canvas ref={canvasRef} style={{ display: "block" }} />
+    <div className="viewer-scroll" ref={scrollRef}>
+      {error && <p className="notice error">{error}</p>}
+      <div className="page" style={{ width: size?.width, height: size?.height }}>
+        <canvas ref={canvasRef} />
         {size &&
           words.map((w, i) => (
             <div
               key={i}
+              className="highlight"
               style={{
-                position: "absolute",
-                left: w.x0 * SCALE,
-                top: w.top * SCALE,
-                width: (w.x1 - w.x0) * SCALE,
-                height: (w.bottom - w.top) * SCALE,
-                background: "rgba(255, 213, 0, 0.4)",
-                pointerEvents: "none",
+                left: w.x0 * size.scale,
+                top: w.top * size.scale,
+                width: (w.x1 - w.x0) * size.scale,
+                height: (w.bottom - w.top) * size.scale,
               }}
             />
           ))}
