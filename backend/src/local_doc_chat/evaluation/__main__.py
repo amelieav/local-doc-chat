@@ -17,6 +17,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--min-hit-rate", type=float, default=0.0, help="exit 1 if hit rate is below this"
     )
+    parser.add_argument("--min-mrr", type=float, default=0.0, help="exit 1 if MRR is below this")
     args = parser.parse_args(argv)
 
     dataset = load_dataset(args.dataset)
@@ -39,7 +40,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"questions={len(report.results)} hit@{report.k}={report.hit_rate:.2f} "
         f"top1={report.top1:.2f} mrr={report.mrr:.2f}"
     )
-    return 0 if report.hit_rate >= args.min_hit_rate else 1
+    return 0 if report.hit_rate >= args.min_hit_rate and report.mrr >= args.min_mrr else 1
 
 
 if __name__ == "__main__":

@@ -26,27 +26,239 @@
         "Condensing gas boilers capture heat from exhaust gases that older boilers wasted, reaching efficiencies above ninety percent. A combi boiler heats water on demand and removes the need for a storage tank, but its flow rate drops when two taps run at once. Boilers should be serviced annually, and carbon monoxide alarms must be fitted nearby.",
         "Smart thermostats learn when the household is home and lower the temperature while everyone is out. Zoned radiator valves let each room be heated to its own schedule. Setting the thermostat one degree lower saves roughly ten percent on heating costs. Weather compensation adjusts boiler flow temperature automatically as the outside temperature changes."
       ]
+    },
+    {
+      "name": "solar-thermal.pdf",
+      "pages": [
+        "Solar thermal collectors heat water directly instead of making electricity. Flat plate collectors on the roof pass fluid through a dark absorber plate, and a pump carries the warmed fluid to a hot water cylinder. A typical household system supplies about sixty percent of annual hot water, with a gas boiler or immersion heater covering the rest in winter.",
+        "Evacuated tube collectors hold each pipe inside a glass vacuum tube that cuts heat loss, so they work better in cold, cloudy weather than flat plates. They cost more per panel and snow can lie on them for days because little heat escapes to melt it. Overheating in summer is prevented by a controller that stops the pump.",
+        "Solar thermal systems need an annual check of the glycol antifreeze in the pipework, which degrades after about five years and must be replaced. The pump and controller are the usual failure points. Unlike photovoltaic panels, a thermal collector keeps working during a power cut only if the pump has a battery backup."
+      ]
+    },
+    {
+      "name": "battery-storage.pdf",
+      "pages": [
+        "Lead acid batteries were the first choice for off grid cabins but allow only fifty percent depth of discharge before wear sets in. They last around five years and need ventilation because they release hydrogen while charging. Their low price per kilowatt hour still suits seasonal holiday homes used a few weeks each summer.",
+        "Sodium ion batteries use cheap abundant sodium instead of lithium and tolerate freezing temperatures well. Their energy density is lower, so a sodium unit takes more wall space for the same capacity. Several manufacturers began selling them for home storage after lithium prices spiked, though cycle life is still being proven.",
+        "Battery capacity is quoted in kilowatt hours, but usable capacity is lower because the battery management system reserves a safety margin. A ten kilowatt hour unit may offer only nine usable. Round trip efficiency, the share of stored energy you get back, is typically ninety percent for lithium and eighty percent for lead acid."
+      ]
+    },
+    {
+      "name": "heat-pump-installer.pdf",
+      "pages": [
+        "Installers size a heat pump by calculating the heat loss of each room, measured in watts. An oversized unit cycles on and off and wears out faster, while an undersized one runs flat out and fails to keep the house warm. Radiators often need replacing with larger ones because heat pumps run at lower flow temperatures than boilers.",
+        "Underfloor heating suits heat pumps because it works at low water temperatures around thirty five degrees. It is slow to respond, so households should keep a steady setting rather than switching it off during the day. Fitting it into an existing house means lifting floors, which makes it far costlier than in a new build.",
+        "Hot water cylinders for heat pumps are larger than normal and need a weekly high temperature cycle to kill legionella bacteria. That cycle uses an immersion element and briefly lowers efficiency. Cylinders should be insulated and located close to the taps to avoid long pipe runs that waste heat."
+      ]
+    },
+    {
+      "name": "energy-guide.pdf",
+      "pages": [
+        "Hydropower dams store water behind a wall and release it through turbines, so output can be raised within seconds. Pumped storage plants run the turbines backwards at night to lift water uphill, acting as a giant battery for the grid. Biomass plants burn wood pellets or crop waste to raise steam. The fuel is only low carbon if the trees are replanted, and transporting bulky pellets over long distances erodes the saving. Tidal barrages trap the incoming tide in a basin and release it through turbines as the sea falls. They produce power on a precise timetable set by the moon, but damage the mudflats where wading birds feed. Nuclear reactors split uranium atoms to boil water. Spent fuel stays radioactive for thousands of years and is stored in cooling ponds before burial in deep geological repositories.",
+        "Geothermal wells reach hot rock a few kilometres down and bring up steam or hot water. Iceland uses the heat for district heating, and plants need no fuel, but drilling can trigger small earthquakes. Green hydrogen is made by splitting water with renewable electricity in an electrolyser. It can fuel steelworks and long distance ships, yet roughly a third of the energy is lost in conversion. Waste to energy plants incinerate household rubbish to make electricity and heat. Filters capture the toxic gases, and the leftover ash is tested before being used in road building. Wave energy devices bob on the surface and pump hydraulic fluid through generators. Storms can destroy them, which is why most prototypes remain small and none yet compete on cost."
+      ]
     }
   ],
   "questions": [
-    { "question": "What fraction of sunlight does a typical home solar panel convert?", "document": "solar-power.pdf", "page": 1 },
-    { "question": "Why does a microinverter help when a panel is in shade?", "document": "solar-power.pdf", "page": 2 },
-    { "question": "Why must grid-connected solar switch off in a blackout?", "document": "solar-power.pdf", "page": 2 },
-    { "question": "Which battery chemistry is popular for home storage and why?", "document": "solar-power.pdf", "page": 3 },
-    { "question": "How fast do solar panels lose output each year?", "document": "solar-power.pdf", "page": 4 },
-    { "question": "Which solar component usually needs replacing first?", "document": "solar-power.pdf", "page": 4 },
-    { "question": "What wind speed makes a large turbine start producing power?", "document": "wind-power.pdf", "page": 1 },
-    { "question": "How does pitch control protect a turbine in a storm?", "document": "wind-power.pdf", "page": 1 },
-    { "question": "Why are offshore turbines costlier than onshore ones?", "document": "wind-power.pdf", "page": 2 },
-    { "question": "What are floating wind platforms used for?", "document": "wind-power.pdf", "page": 2 },
-    { "question": "What is curtailment of wind power?", "document": "wind-power.pdf", "page": 3 },
-    { "question": "Why do wind farms use transformers?", "document": "wind-power.pdf", "page": 3 },
-    { "question": "What is the weakest component in a wind turbine?", "document": "wind-power.pdf", "page": 4 },
-    { "question": "How often do technicians inspect wind turbine blades?", "document": "wind-power.pdf", "page": 4 },
-    { "question": "What is the drawback of direct drive generators?", "document": "wind-power.pdf", "page": 4 },
-    { "question": "How much heat does a heat pump deliver per unit of electricity?", "document": "home-heating.pdf", "page": 1 },
-    { "question": "What is the cheapest insulation upgrade?", "document": "home-heating.pdf", "page": 2 },
-    { "question": "Why can a combi boiler struggle when two taps are on?", "document": "home-heating.pdf", "page": 3 },
-    { "question": "How much does lowering the thermostat by a degree save?", "document": "home-heating.pdf", "page": 4 }
+    {
+      "question": "What fraction of sunlight does a typical home solar panel convert?",
+      "document": "solar-power.pdf",
+      "page": 1
+    },
+    {
+      "question": "Why does a microinverter help when a panel is in shade?",
+      "document": "solar-power.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why must grid-connected solar switch off in a blackout?",
+      "document": "solar-power.pdf",
+      "page": 2
+    },
+    {
+      "question": "Which battery chemistry is popular for home storage and why?",
+      "document": "solar-power.pdf",
+      "page": 3
+    },
+    {
+      "question": "How fast do solar panels lose output each year?",
+      "document": "solar-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "Which solar component usually needs replacing first?",
+      "document": "solar-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "What wind speed makes a large turbine start producing power?",
+      "document": "wind-power.pdf",
+      "page": 1
+    },
+    {
+      "question": "How does pitch control protect a turbine in a storm?",
+      "document": "wind-power.pdf",
+      "page": 1
+    },
+    {
+      "question": "Why are offshore turbines costlier than onshore ones?",
+      "document": "wind-power.pdf",
+      "page": 2
+    },
+    {
+      "question": "What are floating wind platforms used for?",
+      "document": "wind-power.pdf",
+      "page": 2
+    },
+    {
+      "question": "What is curtailment of wind power?",
+      "document": "wind-power.pdf",
+      "page": 3
+    },
+    {
+      "question": "Why do wind farms use transformers?",
+      "document": "wind-power.pdf",
+      "page": 3
+    },
+    {
+      "question": "What is the weakest component in a wind turbine?",
+      "document": "wind-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "How often do technicians inspect wind turbine blades?",
+      "document": "wind-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "What is the drawback of direct drive generators?",
+      "document": "wind-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "How much heat does a heat pump deliver per unit of electricity?",
+      "document": "home-heating.pdf",
+      "page": 1
+    },
+    {
+      "question": "What is the cheapest insulation upgrade?",
+      "document": "home-heating.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why can a combi boiler struggle when two taps are on?",
+      "document": "home-heating.pdf",
+      "page": 3
+    },
+    {
+      "question": "How much does lowering the thermostat by a degree save?",
+      "document": "home-heating.pdf",
+      "page": 4
+    },
+    {
+      "question": "What share of a household's yearly hot water can rooftop water-heating collectors supply?",
+      "document": "solar-thermal.pdf",
+      "page": 1
+    },
+    {
+      "question": "Which collector type copes better with cloud and cold?",
+      "document": "solar-thermal.pdf",
+      "page": 2
+    },
+    {
+      "question": "How often should the antifreeze fluid in a solar hot water system be replaced?",
+      "document": "solar-thermal.pdf",
+      "page": 3
+    },
+    {
+      "question": "Which battery type needs ventilation because it gives off hydrogen?",
+      "document": "battery-storage.pdf",
+      "page": 1
+    },
+    {
+      "question": "Which battery avoids lithium and copes with freezing weather?",
+      "document": "battery-storage.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why is usable battery capacity lower than the number on the label?",
+      "document": "battery-storage.pdf",
+      "page": 3
+    },
+    {
+      "question": "What goes wrong if a heat pump is too large for the house?",
+      "document": "heat-pump-installer.pdf",
+      "page": 1
+    },
+    {
+      "question": "Why should underfloor heating not be switched off during the day?",
+      "document": "heat-pump-installer.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why does a heat pump hot water tank need a weekly hot cycle?",
+      "document": "heat-pump-installer.pdf",
+      "page": 3
+    },
+    {
+      "question": "What happens to power from rooftop panels if the neighbourhood loses electricity?",
+      "document": "solar-power.pdf",
+      "page": 2
+    },
+    {
+      "question": "After twenty five years, how much of its original power is a panel still promised to deliver?",
+      "document": "solar-power.pdf",
+      "page": 4
+    },
+    {
+      "question": "Which roof space upgrade is the least costly way to cut warmth loss?",
+      "document": "home-heating.pdf",
+      "page": 2
+    },
+    {
+      "question": "When storms hit, how are rotor blades stopped from spinning?",
+      "document": "wind-power.pdf",
+      "page": 1
+    },
+    {
+      "question": "How can a hydro plant act as a giant battery?",
+      "document": "energy-guide.pdf",
+      "page": 1
+    },
+    {
+      "question": "Why is burning wood pellets not always low carbon?",
+      "document": "energy-guide.pdf",
+      "page": 1
+    },
+    {
+      "question": "Which power source runs on a schedule set by the moon?",
+      "document": "energy-guide.pdf",
+      "page": 1
+    },
+    {
+      "question": "Where is spent reactor fuel kept before burial?",
+      "document": "energy-guide.pdf",
+      "page": 1
+    },
+    {
+      "question": "What side effect can drilling for hot rock cause?",
+      "document": "energy-guide.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why is green hydrogen inefficient?",
+      "document": "energy-guide.pdf",
+      "page": 2
+    },
+    {
+      "question": "What is done with the ash left after burning household rubbish?",
+      "document": "energy-guide.pdf",
+      "page": 2
+    },
+    {
+      "question": "Why have wave devices not become commercial?",
+      "document": "energy-guide.pdf",
+      "page": 2
+    }
   ]
 }
