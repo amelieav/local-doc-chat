@@ -1,0 +1,18 @@
+{
+  "name": "local-doc-chat-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "productName": "Local Doc Chat",
+  "description": "Electron shell for Local Doc Chat",
+  "main": "main.js",
+  "scripts": {
+    "build:frontend": "npm --prefix ../frontend run build",
+    "start": "npm run build:frontend && electron .",
+    "smoke": "npm run build:frontend && electron . --smoke",
+    "check": "node --check main.js && prettier --check ."
+  },
+  "devDependencies": {
+    "electron": "^45.2.3",
+    "prettier": "^3.9.10"
+  }
+}

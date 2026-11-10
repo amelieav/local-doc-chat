@@ -45,6 +45,14 @@ npm run dev
 
 Then open http://localhost:5173.
 
+Or run it as a desktop app, which starts and stops the backend for you (see `desktop/README.md`):
+
+```bash
+cd desktop
+npm install
+npm start
+```
+
 ## Retrieval eval
 
 `backend/eval/dataset.json` holds generated documents plus questions about a real report. Score
