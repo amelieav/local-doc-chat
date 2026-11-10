@@ -1,4 +1,5 @@
 import hashlib
+import sqlite3
 from pathlib import Path
 
 import pytest
@@ -113,3 +114,66 @@ def test_data_survives_reopening(store: SqliteDocumentStore, tmp_path: Path) -> 
     assert reopened.get(document.id) == document
     assert reopened.read_pdf(document.id) == pdf
     assert len(reopened.get_chunks(document.id)) == 2
+
+
+def add_text_doc(store: SqliteDocumentStore, texts: list[str], name: str = "t.pdf") -> list[Chunk]:
+    pdf = name.encode() + b"".join(t.encode() for t in texts)
+    document, pages, _ = make_doc(pdf, name)
+    chunks = [
+        Chunk(
+            document_id=document.id,
+            chunk_index=i,
+            page_number=1,
+            text=t,
+            words=(Word(text="x", x0=1, top=2, x1=3, bottom=4),),
+        )
+        for i, t in enumerate(texts)
+    ]
+    store.add(document, pdf, pages, chunks)
+    return chunks
+
+
+def test_search_text_matches_words_and_stems(store: SqliteDocumentStore) -> None:
+    chunks = add_text_doc(store, ["China built many solar plants", "Rain fell on the farms"])
+
+    assert store.search_text("Who builds solar?", 5) == [chunks[0].id]
+    assert store.search_text("the of and", 5) == []  # only stop words
+    assert store.search_text("zebra", 5) == []
+
+
+def test_search_text_forgets_deleted_documents(store: SqliteDocumentStore) -> None:
+    chunks = add_text_doc(store, ["unique marmot sentence"])
+    assert store.search_text("marmot", 5) == [chunks[0].id]
+
+    store.delete(chunks[0].document_id)
+
+    assert store.search_text("marmot", 5) == []
+
+
+def test_keyword_index_is_built_for_an_older_database(tmp_path: Path) -> None:
+    db = tmp_path / "db.sqlite"
+    conn = sqlite3.connect(db)
+    conn.executescript(
+        """
+        CREATE TABLE documents (id TEXT PRIMARY KEY, filename TEXT NOT NULL, sha256 TEXT NOT NULL
+            UNIQUE, size_bytes INTEGER NOT NULL, page_count INTEGER NOT NULL, status TEXT NOT NULL,
+            created_at TEXT NOT NULL);
+        CREATE TABLE pages (document_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+            page_number INTEGER NOT NULL, text TEXT NOT NULL,
+            PRIMARY KEY (document_id, page_number));
+        CREATE TABLE chunks (id TEXT PRIMARY KEY, document_id TEXT NOT NULL REFERENCES
+            documents(id) ON DELETE CASCADE, chunk_index INTEGER NOT NULL, page_number INTEGER NOT
+            NULL, text TEXT NOT NULL, words TEXT NOT NULL, UNIQUE (document_id, chunk_index));
+        INSERT INTO documents VALUES ('d', 'old.pdf', 'x', 1, 1, 'ready', '2026-01-01T00:00:00');
+        INSERT INTO chunks VALUES ('00000000-0000-0000-0000-000000000001', 'd', 0, 1,
+            'an old walrus chunk', '[]');
+        """
+    )
+    conn.commit()
+    conn.close()
+
+    store = SqliteDocumentStore(db, tmp_path / "pdfs")
+
+    assert [str(i) for i in store.search_text("walrus", 5)] == [
+        "00000000-0000-0000-0000-000000000001"
+    ]

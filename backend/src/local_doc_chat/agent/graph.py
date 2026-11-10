@@ -76,7 +76,7 @@ class DocAgent:
     """Answers questions from indexed documents, citing file, page and passage."""
 
     def __init__(
-        self, index: DocumentIndex, model: ChatModel, *, k: int = 8, max_attempts: int = 3
+        self, index: DocumentIndex, model: ChatModel, *, k: int = 12, max_attempts: int = 3
     ) -> None:
         if k < 1 or max_attempts < 1:
             msg = "k and max_attempts must be at least 1"

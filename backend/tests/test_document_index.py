@@ -5,6 +5,7 @@ from uuid import uuid4
 import pytest
 
 from local_doc_chat.evaluation.pdfgen import make_pdf
+from local_doc_chat.evaluation.runner import EvalDataset, build_index
 from local_doc_chat.ingest.extraction import PdfplumberExtractor
 from local_doc_chat.ingest.models import Document
 from local_doc_chat.ingest.service import IngestService
@@ -70,7 +71,7 @@ def test_search_finds_the_matching_page_with_source(
     assert (top.chunk.page_number, top.chunk.text) == (2, "dog dog")
     assert top.document.filename == "pets.pdf"
     assert [w.text for w in top.chunk.words] == ["dog", "dog"]
-    assert results[0].distance <= results[1].distance
+    assert results[0].score >= results[1].score
 
 
 def test_indexing_twice_does_not_duplicate(
@@ -128,3 +129,25 @@ def test_embedding_failure_leaves_existing_vectors(
         broken.index_document(document.id)
 
     assert len(index.search("cat", k=5)) == 1
+
+
+class FlatEmbedder:
+    """Every text looks the same, so only keyword search can tell chunks apart."""
+
+    def embed_documents(self, texts: Sequence[str]) -> list[list[float]]:
+        return [[1.0, 0.0] for _ in texts]
+
+    def embed_query(self, text: str) -> list[float]:
+        return [1.0, 0.0]
+
+
+def test_hybrid_search_finds_an_exact_word_the_vectors_cannot(tmp_path: Path) -> None:
+    dataset = EvalDataset.model_validate(
+        {
+            "documents": [{"name": "a.pdf", "pages": ["alpha beta", "gamma zebra", "delta omega"]}],
+            "questions": [{"question": "q", "document": "a.pdf", "page": 1}],
+        }
+    )
+    index = build_index(dataset, FlatEmbedder(), tmp_path)
+
+    assert index.search("zebra", k=1)[0].chunk.page_number == 2

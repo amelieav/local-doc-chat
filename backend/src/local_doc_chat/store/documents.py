@@ -1,6 +1,7 @@
 """Document storage: PDFs on disk, metadata and page text in SQLite."""
 
 import json
+import re
 import sqlite3
 from collections.abc import Sequence
 from contextlib import closing
@@ -46,6 +47,8 @@ class DocumentStore(Protocol):
 
     def get_chunks_by_ids(self, chunk_ids: Sequence[UUID]) -> list[Chunk]: ...
 
+    def search_text(self, query: str, k: int) -> list[UUID]: ...
+
     def read_pdf(self, document_id: UUID) -> bytes: ...
 
     def delete(self, document_id: UUID) -> bool: ...
@@ -76,7 +79,31 @@ CREATE TABLE IF NOT EXISTS chunks (
     words TEXT NOT NULL,
     UNIQUE (document_id, chunk_index)
 );
+CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(
+    text, content='chunks', content_rowid='rowid', tokenize='porter unicode61'
+);
+CREATE TRIGGER IF NOT EXISTS chunks_fts_insert AFTER INSERT ON chunks BEGIN
+    INSERT INTO chunks_fts(rowid, text) VALUES (new.rowid, new.text);
+END;
+CREATE TRIGGER IF NOT EXISTS chunks_fts_delete AFTER DELETE ON chunks BEGIN
+    INSERT INTO chunks_fts(chunks_fts, rowid, text) VALUES ('delete', old.rowid, old.text);
+END;
 """
+
+# Words too common to help a keyword search.
+_STOP_WORDS = frozenset(
+    {
+        *("a", "an", "and", "are", "as", "at", "be", "by", "did", "do", "does", "for"),
+        *("from", "how", "in", "is", "it", "of", "on", "or", "that", "the", "this", "to"),
+        *("was", "what", "when", "where", "which", "who", "whom", "why", "with"),
+    }
+)
+
+
+def _match_expression(query: str) -> str:
+    """Turn a question into an FTS5 query: any of its meaningful words."""
+    words = [w for w in re.findall(r"[a-z0-9]+", query.lower()) if w not in _STOP_WORDS]
+    return " OR ".join(f'"{w}"' for w in words)
 
 
 def _chunk_from_row(row: sqlite3.Row) -> Chunk:
@@ -92,7 +119,13 @@ class SqliteDocumentStore:
         db_path.parent.mkdir(parents=True, exist_ok=True)
         pdf_dir.mkdir(parents=True, exist_ok=True)
         with closing(self._connect()) as conn:
+            had_fts = conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE name = 'chunks_fts'"
+            ).fetchone()
             conn.executescript(_SCHEMA)
+            if not had_fts:  # database from before keyword search: index what is already there
+                conn.execute("INSERT INTO chunks_fts(chunks_fts) VALUES ('rebuild')")
+                conn.commit()
 
     def add(
         self, document: Document, pdf: bytes, pages: Sequence[Page], chunks: Sequence[Chunk]
@@ -172,6 +205,20 @@ class SqliteDocumentStore:
                 for i in chunk_ids
             ]
         return [_chunk_from_row(row) for row in rows if row is not None]
+
+    def search_text(self, query: str, k: int) -> list[UUID]:
+        """Chunk ids matching the query's words, best first (BM25). Empty if no usable words."""
+        expression = _match_expression(query)
+        if not expression:
+            return []
+        # shortcut: the FTS index is keyed by rowid, so never VACUUM this database.
+        with closing(self._connect()) as conn:
+            rows = conn.execute(
+                "SELECT chunks.id FROM chunks_fts JOIN chunks ON chunks.rowid = chunks_fts.rowid "
+                "WHERE chunks_fts MATCH ? ORDER BY chunks_fts.rank LIMIT ?",
+                (expression, k),
+            ).fetchall()
+        return [UUID(r[0]) for r in rows]
 
     def read_pdf(self, document_id: UUID) -> bytes:
         document = self.get(document_id)
